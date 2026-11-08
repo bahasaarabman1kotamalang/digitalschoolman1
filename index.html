@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAN 1 Kota Malang Digital School</title><style>
+:root{--navy:#102b46;--green:#087e65;--bg:#f3f6f9;--line:#e4eaf0}*{box-sizing:border-box}body{margin:0;font:14px Arial,sans-serif;background:var(--bg);color:#263445}button,input,select,textarea{font:inherit;padding:10px;border:1px solid #d7dee7;border-radius:8px}button{background:var(--green);color:white;border:0;cursor:pointer;font-weight:bold}.secondary{background:#edf2f6;color:var(--navy)}.danger{background:#b42318}.login{min-height:100vh;display:grid;place-items:center;background:linear-gradient(130deg,#102b46,#087e65)}.loginbox{background:white;padding:30px;border-radius:18px;width:min(400px,92vw)}.loginbox input{width:100%;margin:6px 0 12px}.loginbox button{width:100%}.app{display:none}.side{position:fixed;inset:0 auto 0 0;width:230px;background:var(--navy);color:white;padding:20px 12px;overflow:auto}.brand{font-weight:bold;padding:10px 8px 24px}.nav{padding:12px;border-radius:8px;cursor:pointer;color:#dce8f1}.nav:hover,.nav.active{background:#ffffff22;color:white}.main{margin-left:230px}.top{height:65px;background:white;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 25px;position:sticky;top:0}.content{padding:25px;max-width:1400px;margin:auto}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.head h2{margin:0;color:var(--navy)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:white;border:1px solid var(--line);border-radius:13px;padding:17px;margin-bottom:15px}.stat small{color:#667085}.stat h2{margin:8px 0;color:var(--navy);font-size:28px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar input{max-width:260px}table{width:100%;border-collapse:collapse;min-width:560px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line)}th{font-size:11px;color:#667085;background:#fafbfc}.wrap{overflow:auto}.modal{display:none;position:fixed;inset:0;background:#102b4677;place-items:center;padding:15px}.modal.show{display:grid}.box{background:white;padding:22px;border-radius:14px;width:min(560px,100%);max-height:90vh;overflow:auto}.box input,.box select,.box textarea{width:100%;margin:5px 0 12px}.pill{padding:4px 8px;border-radius:20px;background:#e7f6ee;color:#087443;font-size:12px}.notice{background:#fff6df;color:#775515;padding:13px;border-radius:9px;margin-top:14px;font-size:12px}.actions{display:flex;gap:5px}.actions button{padding:6px 9px;font-size:12px}@media(max-width:800px){.side{width:65px;padding:12px 5px}.brand{font-size:0}.nav{font-size:0;text-align:center}.nav:before{content:attr(data-icon);font-size:19px}.main{margin-left:65px}.grid{grid-template-columns:repeat(2,1fr)}.content{padding:14px}.top{padding:0 12px;font-size:12px}}@media(max-width:480px){.grid{grid-template-columns:1fr 1fr}.card{padding:12px}.head{display:block}.head button{margin-top:10px}}@media print{.side,.top,.head button,.toolbar button,.actions{display:none!important}.main{margin:0}}
+.perm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.perm-item{display:flex;align-items:flex-start;gap:8px;padding:9px;border:1px solid var(--line);border-radius:8px;background:#fbfcfd}.perm-item input{width:auto;margin:2px 0 0}.small-muted{font-size:12px;color:#667085}.account-actions{display:flex;gap:6px;flex-wrap:wrap}.account-actions button{font-size:11px;padding:7px 9px}@media(max-width:520px){.perm-grid{grid-template-columns:1fr}}\n</style></head><body>
+<div id="login" class="login"><form class="loginbox" onsubmit="login();return false"><div style="font-size:35px">🏫</div><h2 style="color:#102b46;margin-bottom:4px">MAN 1 KOTA MALANG</h2><b style="color:#087e65">DIGITAL SCHOOL</b><p>Portal manajemen dan layanan pendidikan madrasah.</p><label for="user">Username</label><input id="user" name="username" autocomplete="username" required><label for="pass">Password</label><input id="pass" name="password" type="password" autocomplete="current-password" required><button id="loginButton" type="submit">Masuk ke Aplikasi →</button><p id="loginMessage" style="font-size:12px;color:#667085;margin-top:12px">Gunakan akun yang dibuat oleh Admin madrasah.</p></form></div>
+<div id="app" class="app"><aside class="side"><div class="brand">🏫 MAN 1 KOTA MALANG<br><small>DIGITAL SCHOOL</small></div><div class="nav active" data-icon="▦" onclick="page('dashboard')">Dashboard</div><div class="nav" data-icon="🎓" onclick="page('students')">Data Siswa</div><div class="nav" data-icon="👩‍🏫" onclick="page('teachers')">Guru & Pegawai</div><div class="nav" data-icon="🔐" onclick="page('accounts')">Manajemen Akun</div><div class="nav" data-icon="📍" onclick="page('attendance')">Presensi</div><div class="nav" data-icon="📝" onclick="page('exams')">CBT & Bank Soal</div><div class="nav" data-icon="📊" onclick="page('grades')">Nilai Akademik</div><div class="nav" data-icon="💳" onclick="page('finance')">Keuangan</div><div class="nav" data-icon="📢" onclick="page('news')">Pengumuman</div><div class="nav" data-icon="⚙️" onclick="page('settings')">Pengaturan & Data</div></aside><main class="main"><header class="top"><b>Portal Manajemen Madrasah</b><span id="syncStatus" style="font-size:11px;color:#667085">Menunggu koneksi</span><span id="date"></span><span id="currentUserLabel" style="font-size:12px;color:#087e65;font-weight:bold"></span><button class="secondary" onclick="logout()">Keluar</button></header><div id="view" class="content"></div></main></div>
+<div id="modal" class="modal"><div class="box"><div style="display:flex;justify-content:space-between"><h3 id="mt" style="margin-top:0;color:#102b46"></h3><button class="secondary" onclick="closeM()">✕</button></div><div id="mb"></div></div></div>
+<script>
+const K='man1_school_data';const initial={students:[],teachers:[],attendance:[],exams:[],grades:[],finance:[],news:[{title:'Selamat Datang di Digital School MAN 1 Kota Malang',body:'Portal layanan administrasi dan pembelajaran madrasah.',date:new Date().toISOString().slice(0,10)}]};let db=JSON.parse(JSON.stringify(initial));function save(){localStorage.setItem(K,JSON.stringify({attendance:db.attendance,exams:db.exams,grades:db.grades,finance:db.finance,news:db.news}))}
+
+const ATTENDANCE_DEFAULTS = {
+  active: true,
+  schoolName: "MAN 1 Kota Malang",
+  latitude: -7.932858303917564,
+  longitude: 112.60621037589507,
+  radiusMeters: 190,
+  startTime: "05:30",
+  onTimeUntil: "06:45",
+  endTime: "08:00",
+  maxAccuracyMeters: 75,
+  timeZone: "Asia/Jakarta"
+};
+let attendanceConfig = Object.assign({}, ATTENDANCE_DEFAULTS);
+
+function hasServer(){return typeof google!=='undefined'&&google.script&&google.script.run}
+function gasCall(method,...args){return new Promise((resolve,reject)=>{if(!hasServer())return reject(new Error('Aplikasi belum dibuka melalui Google Apps Script Web App.'));const runner=google.script.run.withSuccessHandler(resolve).withFailureHandler(err=>reject(new Error(err&&err.message?err.message:String(err))));runner[method](...args)})}
+async function syncStudents(){const rows=await gasCall('apiAmbilSiswa');db.students=Array.isArray(rows)?rows:[];save();return db.students}
+async function syncTeachers(){const rows=await gasCall('apiAmbilGuruPegawai');db.teachers=Array.isArray(rows)?rows:[];save();const status=document.getElementById('syncStatus');if(status)status.textContent='Google Sheets aktif • Siswa & Guru/Tendik tersinkron';return db.teachers}
+async function refreshStudents(){try{await syncStudents();page('students')}catch(err){alert('Gagal menyinkronkan data siswa: '+err.message)}}
+async function refreshTeachers(){try{await syncTeachers();page('teachers')}catch(err){alert('Gagal menyinkronkan data Guru/Tendik: '+err.message)}}
+async function login(){if(user.value==='admin'&&pass.value==='admin123'){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';date.textContent=new Date().toLocaleDateString('id-ID');if(hasServer()){const status=document.getElementById('syncStatus');if(status)status.textContent='Menghubungkan ke Google Sheets...';try{await syncStudents();await syncTeachers();attendanceConfig=await gasCall('apiAmbilKonfigurasiPresensi')}catch(err){if(status)status.textContent='Koneksi database gagal';alert('Aplikasi terbuka, tetapi data siswa atau Guru/Tendik belum dapat diambil dari Google Sheets.\\n'+err.message)}}else{const status=document.getElementById('syncStatus');if(status)status.textContent='Mode lokal • belum tersambung ke Google Sheets'}page('dashboard')}else alert('Login salah. Gunakan akun demo admin / admin123')}function logout(){app.style.display='none';document.getElementById('login').style.display='grid'}function page(p){document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.textContent.trim().toLowerCase().startsWith(p==='news'?'pengumuman':p==='settings'?'pengaturan':p==='teachers'?'guru':p)));let v=document.getElementById('view'),head=(t,d,b='')=>`<div class="head"><div><h2>${t}</h2><p style="color:#667085">${d}</p></div>${b}</div>`,stat=(t,n,i)=>`<div class="card stat"><small>${i} ${t}</small><h2>${n}</h2></div>`;if(p==='dashboard')v.innerHTML=head('Dashboard Madrasah','Ringkasan aktivitas MAN 1 Kota Malang hari ini.')+`<div class="grid">${stat('Total Siswa',db.students.length,'🎓')}${stat('Guru & Pegawai',db.teachers.length,'👩‍🏫')}${stat('Presensi Hari Ini',db.attendance.filter(x=>x.date===today()).length,'📍')}${stat('Paket Ujian',db.exams.length,'📝')}</div><div class="card"><h3>Aktivitas Cepat</h3><button onclick="page('students')">＋ Data siswa</button> <button onclick="page('attendance')">＋ Presensi</button> <button onclick="page('exams')">＋ Buat ujian</button> <button onclick="page('news')">＋ Pengumuman</button><div class="notice">Data Siswa serta Guru/Tendik sudah terhubung ke Google Sheets. Presensi GPS masih dalam tahap uji validasi dan belum menyimpan presensi resmi.</div></div><div class="card"><h3>Pengumuman terbaru</h3>${db.news.slice(-3).reverse().map(x=>`<p><b>${e(x.title)}</b><br>${e(x.date)}<br>${e(x.body)}</p>`).join('')}</div>`;
+else if(p==='students')v.innerHTML=head('Data Siswa','Kelola identitas dan rombongan belajar.',`<button class="secondary" onclick="refreshStudents()">↻ Sinkronkan</button> <button onclick="studentForm()">＋ Tambah Siswa</button>`)+`<div class="notice">Data Siswa dan Guru/Tendik terhubung ke Google Sheets. Modul akademik dan administrasi lainnya masih dalam tahap integrasi bertahap.</div>`+table('students',['NIS','Nama','Kelas','L/P','Telepon'],['id','name','kelas','gender','phone']);else if(p==='teachers')renderTeachersPage();
+else if(p==='attendance'){const c=attendanceConfig;v.innerHTML=head('Presensi Digital GPS','Uji kelayakan lokasi perangkat berdasarkan konfigurasi awal madrasah.',`<button class="secondary" onclick="page('settings')">Pengaturan Presensi</button>`)+`<div class="grid">${stat('Radius GPS',c.radiusMeters+' m','📍')}${stat('Mulai Presensi',c.startTime,'🕠')}${stat('Batas Tepat Waktu',c.onTimeUntil,'⏱️')}${stat('Tutup Presensi',c.endTime,'🔒')}</div><div class="card"><h3>Uji Lokasi Perangkat</h3><p style="color:#667085">Tekan tombol untuk meminta lokasi GPS HP/komputer ini. Server akan memeriksa jarak, akurasi, dan waktu berdasarkan konfigurasi rancangan.</p><div class="notice">Uji ini hanya simulasi validasi. Belum menyimpan kehadiran siswa ke Google Sheets karena autentikasi akun siswa belum diaktifkan.</div><button onclick="ujiGPSPresensi()">⌖ Uji Lokasi GPS Saya</button><div id="gpsResult" style="margin-top:12px" class="notice">Belum ada pengujian lokasi.</div></div><div class="card"><h3>Ketentuan yang Berlaku</h3><div class="wrap"><table><tbody><tr><th>Status sistem</th><td>${c.active?'Aktif':'Nonaktif'}</td></tr><tr><th>Radius madrasah</th><td>${e(c.radiusMeters)} meter</td></tr><tr><th>Jadwal presensi</th><td>${e(c.startTime)}–${e(c.endTime)} WIB</td></tr><tr><th>Batas tepat waktu</th><td>${e(c.onTimeUntil)} WIB</td></tr><tr><th>Akurasi GPS maksimum</th><td>${e(c.maxAccuracyMeters)} meter</td></tr><tr><th>Zona waktu</th><td>${e(c.timeZone)}</td></tr></tbody></table></div></div>`;}
+else if(p==='exams')v.innerHTML=head('CBT & Bank Soal','Buat paket ujian pilihan ganda dan koreksi otomatis.',`<button onclick="examForm()">＋ Buat Paket Ujian</button>`)+`<div class="card">${table('exams',['Nama Ujian','Mapel','Kelas','Tanggal','Jumlah Soal'],['title','subject','kelas','date','count'])}<div id="examrun"></div></div>`;
+else if(p==='grades')v.innerHTML=head('Nilai Akademik','Input dan rekap hasil belajar.',`<button onclick="gradeForm()">＋ Input Nilai</button>`)+`<div class="card">${table('grades',['Tanggal','NIS','Nama','Kelas','Mapel','Nilai'],['date','sid','name','kelas','subject','score'])}<button class="secondary" onclick="csv('grades')">Ekspor CSV</button></div>`;
+else if(p==='finance')v.innerHTML=head('Administrasi Keuangan','Catat transaksi pemasukan dan pengeluaran.',`<button onclick="financeForm()">＋ Catat Transaksi</button>`)+`<div class="grid">${stat('Pemasukan',money(db.finance.filter(x=>x.type==='Pemasukan').reduce((a,x)=>a+ +x.amount,0)),'↗️')}${stat('Pengeluaran',money(db.finance.filter(x=>x.type==='Pengeluaran').reduce((a,x)=>a+ +x.amount,0)),'↘️')}${stat('Transaksi',db.finance.length,'🧾')}${stat('Saldo',money(db.finance.reduce((a,x)=>a+(x.type==='Pemasukan'?1:-1)* +x.amount,0)),'💰')}</div><div class="card">${table('finance',['Tanggal','Jenis','Keterangan','Nominal'],['date','type','note','amount'])}<button class="secondary" onclick="csv('finance')">Ekspor CSV</button></div><div class="notice">Modul pencatatan internal, bukan sistem pembayaran/virtual account atau pembukuan resmi.</div>`;
+else if(p==='news')v.innerHTML=head('Pengumuman & Informasi','Publikasikan informasi internal portal.',`<button onclick="newsForm()">＋ Buat Pengumuman</button>`)+`<div class="card">${db.news.slice().reverse().map((x,i)=>`<article style="border-bottom:1px solid #eee;padding:12px"><small>${e(x.date)}</small><h3>${e(x.title)}</h3><p>${e(x.body)}</p><button class="danger" onclick="del('news',${db.news.length-1-i})">Hapus</button></article>`).join('')}</div>`;
+else v.innerHTML=head('Pengaturan & Data','Konfigurasi rancangan presensi dan pengelolaan data browser.')+`<div class="card"><h3>Konfigurasi Awal Presensi GPS</h3><span class="pill">Nilai rancangan • belum disimpan ke Google Sheets</span><p style="color:#667085">Nilai berikut dibaca dari konstanta di Code.gs. Tidak ada perubahan otomatis pada sheet Settings.</p><div class="wrap"><table><tbody><tr><th>Presensi aktif</th><td>${attendanceConfig.active?'Ya':'Tidak'}</td></tr><tr><th>Lokasi madrasah</th><td>${e(attendanceConfig.latitude)}, ${e(attendanceConfig.longitude)}</td></tr><tr><th>Radius GPS</th><td>${e(attendanceConfig.radiusMeters)} meter</td></tr><tr><th>Jam mulai</th><td>${e(attendanceConfig.startTime)} WIB</td></tr><tr><th>Batas tepat waktu</th><td>${e(attendanceConfig.onTimeUntil)} WIB</td></tr><tr><th>Jam tutup</th><td>${e(attendanceConfig.endTime)} WIB</td></tr><tr><th>Akurasi GPS maksimum</th><td>${e(attendanceConfig.maxAccuracyMeters)} meter</td></tr><tr><th>Zona waktu</th><td>${e(attendanceConfig.timeZone)}</td></tr></tbody></table></div><div class="notice">Pengaturan ini belum dapat diubah/disimpan dari dashboard. Perubahan konfigurasi produksi akan diaktifkan setelah autentikasi admin dan mekanisme penyimpanan pengaturan selesai dibuat.</div><button onclick="page('attendance')">Buka Uji GPS</button></div><div class="card"><h3>Backup Data Browser</h3><button onclick="backup()">Unduh Backup JSON</button><p>Pulihkan dari file backup JSON:</p><input type="file" id="restoreFile" accept=".json"><button class="secondary" onclick="restore()">Pulihkan Data</button></div><div class="card"><h3>Identitas Madrasah</h3><b>MAN 1 Kota Malang — Digital School</b><p>Cache modul lokal disimpan di browser. Data Siswa dan Guru/Tendik yang sudah tersinkron tetap berada di Google Sheets.</p><button class="danger" onclick="reset()">Reset cache browser</button></div><div class="notice"><b>Catatan operasional:</b> login admin saat ini masih demo. Uji GPS hanya memeriksa kelayakan lokasi dan waktu; penyimpanan presensi resmi menunggu autentikasi siswa yang aman. Untuk penggunaan produksi, akses Web App harus dibatasi dan akun siswa diverifikasi di server.</div>`}
+function today(){return new Date().toISOString().slice(0,10)}function e(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function money(n){return new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(+n||0)}function table(key,heads,fields,filter=false){let rows=db[key];if(filter)rows=rows.filter(x=>x.date===(document.getElementById('filterDate')?.value||today()));return `<div class="toolbar"><input placeholder="Cari data..." oninput="filterRows(this)"><button class="secondary" onclick="csv('${key}')">Ekspor CSV</button></div><div class="wrap"><table><thead><tr>${heads.map(x=>`<th>${x}</th>`).join('')}<th>Aksi</th></tr></thead><tbody>${rows.map((x,i)=>`<tr>${fields.map(f=>`<td>${e(f==='count'?(x.questions||[]).length:x[f])}</td>`).join('')}<td><div class="actions">${key==='exams'?`<button onclick="take(${i})">Mulai</button>`:''}<button class="secondary" onclick="edit('${key}',${db[key].indexOf(x)})">Edit</button><button class="danger" onclick="del('${key}',${db[key].indexOf(x)})">Hapus</button></div></td></tr>`).join('')||`<tr><td colspan="${heads.length+1}">Belum ada data.</td></tr>`}</tbody></table></div>`}function filterRows(inp){let q=inp.value.toLowerCase();inp.closest('.card, #view').querySelectorAll('tbody tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
+function modal(t,h){mt.textContent=t;mb.innerHTML=h;document.getElementById('modal').classList.add('show')}function closeM(){modalEl=document.getElementById('modal');modalEl.classList.remove('show')}function inp(label,id,val='',type='text'){return `<label>${label}</label><input id="${id}" type="${type}" value="${e(val)}">`}function val(id){return document.getElementById(id)?.value||''}
+function studentForm(i=-1){let x=i<0?{id:'',name:'',kelas:'X-1',gender:'L',phone:''}:db.students[i];modal('Form Data Siswa',inp('NIS','id',x.id)+inp('Nama','name',x.name)+inp('Kelas','kelas',x.kelas)+`<label>Jenis Kelamin</label><select id="gender"><option>L</option><option ${x.gender==='P'?'selected':''}>P</option></select>`+inp('Telepon','phone',x.phone)+`<button onclick="saveStudent(${i})">Simpan</button>`)}async function saveStudent(i){let x={id:val('id').trim(),name:val('name').trim(),kelas:val('kelas').trim(),gender:val('gender'),phone:val('phone').trim()};if(!x.id||!x.name)return alert('NIS dan nama wajib diisi');if(hasServer()){try{const old=i<0?null:db.students[i];await gasCall('apiSimpanSiswa',{...x,recordId:old?old.recordId:''});await syncStudents();done('students')}catch(err){alert('Data siswa gagal disimpan: '+err.message)}}else{if(i<0)db.students.push(x);else db.students[i]=x;done('students')}}function renderTeachersPage(){
+  const all=db.teachers||[];
+  const guru=all.filter(x=>x.category==='Guru').length;
+  const tendik=all.filter(x=>x.category==='Tenaga Kependidikan').length;
+  const v=document.getElementById('view');
+  v.innerHTML=`<div class="head"><div><h2>Guru & Pegawai</h2><p style="color:#667085">Kelola data pendidik dan tenaga kependidikan dalam satu menu.</p></div><div class="toolbar"><button class="secondary" onclick="refreshTeachers()">↻ Sinkronkan</button><button onclick="teacherForm()">＋ Tambah Personel</button></div></div>
+  <div class="grid"><div class="card stat"><small>👩‍🏫 Total Guru</small><h2>${guru}</h2></div><div class="card stat"><small>🧑‍💼 Total Tendik</small><h2>${tendik}</h2></div><div class="card stat"><small>Aktif</small><h2>${all.filter(x=>x.status!=='Nonaktif').length}</h2></div><div class="card stat"><small>Nonaktif</small><h2>${all.filter(x=>x.status==='Nonaktif').length}</h2></div></div>
+  <div class="card"><div class="toolbar"><select id="teacherCategoryFilter" onchange="filterTeacherCategory()"><option value="Semua">Semua Kategori</option><option value="Guru">Guru</option><option value="Tenaga Kependidikan">Tenaga Kependidikan</option><option value="Belum dikategorikan">Belum dikategorikan</option></select><input id="teacherSearch" placeholder="Cari NIP/ID atau nama..." oninput="filterTeacherRows()"><button class="secondary" onclick="csv('teachers')">Ekspor CSV</button></div>
+  <div class="wrap"><table><thead><tr><th>NIP/ID</th><th>Nama</th><th>Kategori</th><th>Jabatan</th><th>Mapel/Unit Kerja</th><th>Telepon</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="teacherRows">${all.map((x,i)=>teacherRowHtml(x,i)).join('')||'<tr><td colspan="8">Belum ada data personel. Klik Tambah Personel untuk mulai mengisi.</td></tr>'}</tbody></table></div></div>
+  <div class="notice">Data Guru dan Tenaga Kependidikan tersimpan pada sheet Teachers di Google Sheets. Kategori membedakan Guru dan Tendik; keduanya tetap dikelola melalui menu ini.</div>`;
+}
+function teacherRowHtml(x,i){
+  const unitText=x.category==='Guru'?(x.subject||x.unit||'—'):(x.unit||x.subject||'—');
+  return `<tr data-category="${e(x.category)}"><td>${e(x.id)}</td><td>${e(x.name)}</td><td>${e(x.category)}</td><td>${e(x.position||'—')}</td><td>${e(unitText)}</td><td>${e(x.phone||'—')}</td><td>${e(x.status||'Aktif')}</td><td><div class="actions"><button class="secondary" onclick="edit('teachers',${i})">Edit</button><button class="danger" onclick="del('teachers',${i})">Hapus</button></div></td></tr>`;
+}
+function filterTeacherCategory(){
+  const category=document.getElementById('teacherCategoryFilter')?.value||'Semua';
+  document.querySelectorAll('#teacherRows tr[data-category]').forEach(row=>row.style.display=(category==='Semua'||row.dataset.category===category)?'':'none');
+  filterTeacherRows();
+}
+function filterTeacherRows(){
+  const q=(document.getElementById('teacherSearch')?.value||'').toLowerCase();
+  const category=document.getElementById('teacherCategoryFilter')?.value||'Semua';
+  document.querySelectorAll('#teacherRows tr[data-category]').forEach(row=>{
+    const categoryOk=category==='Semua'||row.dataset.category===category;
+    const textOk=row.innerText.toLowerCase().includes(q);
+    row.style.display=categoryOk&&textOk?'':'none';
+  });
+}
+function teacherForm(i=-1){
+  const x=i<0?{id:'',name:'',category:'',position:'',subject:'',unit:'',phone:'',status:'Aktif'}:db.teachers[i];
+  const category=x.category==='Belum dikategorikan'?'':(x.category||'');
+  const html=inp('NIP / ID Pegawai','id',x.id)+inp('Nama Lengkap','name',x.name)+
+    `<label>Kategori Personel</label><select id="category" onchange="toggleTeacherFields()"><option value="">Pilih kategori</option><option value="Guru" ${category==='Guru'?'selected':''}>Guru</option><option value="Tenaga Kependidikan" ${category==='Tenaga Kependidikan'?'selected':''}>Tenaga Kependidikan (Tendik)</option></select>`+
+    inp('Jabatan','position',x.position||'')+
+    `<div id="teacherSubjectWrap">${inp('Mata Pelajaran (untuk Guru)','subject',x.subject||'')}</div>`+
+    `<div id="teacherUnitWrap">${inp('Unit Kerja (untuk Tendik)','unit',x.unit||'')}</div>`+
+    inp('Nomor Telepon','phone',x.phone||'')+
+    `<label>Status Kepegawaian</label><select id="employmentStatus"><option value="Aktif" ${(x.status||'Aktif')==='Aktif'?'selected':''}>Aktif</option><option value="Nonaktif" ${x.status==='Nonaktif'?'selected':''}>Nonaktif</option></select>`+
+    `<div class="toolbar"><button onclick="saveTeacher(${i})">Simpan ke Database</button><button class="secondary" onclick="closeM()">Batal</button></div>`;
+  modal(i<0?'Tambah Guru / Tenaga Kependidikan':'Edit Data Personel',html);
+  toggleTeacherFields();
+}
+function toggleTeacherFields(){
+  const category=val('category');
+  const subject=document.getElementById('teacherSubjectWrap');
+  const unit=document.getElementById('teacherUnitWrap');
+  if(subject)subject.style.display=category==='Guru'?'block':'none';
+  if(unit)unit.style.display=category==='Tenaga Kependidikan'?'block':'none';
+}
+async function saveTeacher(i){
+  const x={
+    id:val('id').trim(),name:val('name').trim(),category:val('category'),
+    position:val('position').trim(),subject:val('subject').trim(),unit:val('unit').trim(),
+    phone:val('phone').trim(),status:val('employmentStatus')
+  };
+  if(!x.id||!x.name)return alert('NIP/ID dan nama lengkap wajib diisi.');
+  if(!x.category)return alert('Pilih kategori Guru atau Tenaga Kependidikan.');
+  if(hasServer()){
+    try{
+      const old=i<0?null:db.teachers[i];
+      await gasCall('apiSimpanGuruPegawai',{...x,recordId:old?old.recordId:''});
+      await syncTeachers();
+      closeM();
+      page('teachers');
+      alert('Data personel berhasil disimpan ke Google Sheets.');
+    }catch(err){alert('Data personel gagal disimpan: '+err.message)}
+  }else{
+    alert('Mode lokal tidak diizinkan untuk pengelolaan data personel. Buka aplikasi melalui URL Google Apps Script Web App.');
+  }
+}
+async function ujiGPSPresensi(){
+  const result=document.getElementById('gpsResult');
+  if(!result)return;
+  if(!hasServer()){
+    result.innerHTML='<b>Koneksi belum tersedia.</b><br>Buka aplikasi melalui URL Google Apps Script Web App (HTTPS), bukan dengan membuka file HTML langsung.';
+    return;
+  }
+  if(!navigator.geolocation){
+    result.innerHTML='<b>Perangkat/browser tidak mendukung GPS.</b>';
+    return;
+  }
+
+  result.innerHTML='Sedang meminta lokasi GPS perangkat...';
+  navigator.geolocation.getCurrentPosition(async position=>{
+    try{
+      const hasil=await gasCall('apiUjiLokasiPresensi',{
+        latitude:position.coords.latitude,
+        longitude:position.coords.longitude,
+        accuracyMeters:position.coords.accuracy
+      });
+      const warna=hasil.eligible?'#087443':'#b42318';
+      const judul=hasil.eligible?'Lokasi memenuhi ketentuan rancangan':'Lokasi belum memenuhi ketentuan';
+      result.innerHTML=`<div style="border-left:4px solid ${warna};padding:10px;background:#f7f9fb;border-radius:6px"><b style="color:${warna}">${e(judul)}</b><p>${e(hasil.message)}</p><div>Waktu server: <b>${e(hasil.serverTime)}</b> WIB</div><div>Jarak dari madrasah: <b>${hasil.distanceMeters===null?'—':e(hasil.distanceMeters)+' meter'}</b></div><div>Akurasi GPS: <b>${hasil.accuracyMeters===null?'—':e(hasil.accuracyMeters)+' meter'}</b></div><div>Status waktu simulasi: <b>${e(hasil.attendanceStatus||'Belum memenuhi syarat')}</b></div><small style="color:#667085">Hasil uji saja — tidak ada data presensi yang disimpan.</small></div>`;
+    }catch(err){
+      result.innerHTML='<b>Pengujian gagal:</b> '+e(err.message);
+    }
+  },error=>{
+    let msg='Lokasi tidak dapat dibaca.';
+    if(error.code===1)msg='Izin lokasi ditolak. Aktifkan izin lokasi untuk situs ini.';
+    else if(error.code===2)msg='Lokasi perangkat tidak tersedia. Periksa GPS dan koneksi perangkat.';
+    else if(error.code===3)msg='Permintaan lokasi terlalu lama. Coba kembali di area terbuka.';
+    result.innerHTML='<b>'+e(msg)+'</b>';
+  },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+}
+
+function attForm(){if(!db.students.length)return alert('Tambahkan siswa dahulu');modal('Catat Presensi',`<label>Siswa</label><select id="sid">${db.students.map(s=>`<option value="${e(s.id)}">${e(s.id)} — ${e(s.name)} (${e(s.kelas)})</option>`)}</select>`+inp('Tanggal','dt',today(),'date')+`<label>Status</label><select id="status"><option>Hadir</option><option>Izin</option><option>Sakit</option><option>Alpa</option></select><button onclick="saveAtt()">Simpan</button>`)}function saveAtt(){let s=db.students.find(x=>x.id===val('sid')),dt=val('dt');if(db.attendance.some(x=>x.sid===s.id&&x.date===dt))return alert('Presensi sudah ada');db.attendance.push({sid:s.id,name:s.name,kelas:s.kelas,date:dt,status:val('status')});done('attendance')}
+let temp=[];function examForm(){temp=[];modal('Buat Paket Ujian',inp('Nama Ujian','title')+inp('Mata Pelajaran','subject')+inp('Kelas','kelas','X')+inp('Tanggal','dt',today(),'date')+'<hr><h4>Tambah soal</h4>'+`<label>Pertanyaan</label><textarea id="q"></textarea>`+[0,1,2,3,4].map(n=>inp('Opsi '+String.fromCharCode(65+n),'o'+n)).join('')+`<label>Kunci jawaban</label><select id="ans">${[0,1,2,3,4].map(n=>`<option value="${n}">${String.fromCharCode(65+n)}</option>`)}</select><button class="secondary" onclick="addQ()">Tambah Soal</button><p id="qc">0 soal ditambahkan</p><button onclick="saveExam()">Simpan Paket Ujian</button>`)}function addQ(){let q=val('q'),opts=[0,1,2,3,4].map(n=>val('o'+n));if(!q||opts.some(x=>!x))return alert('Isi pertanyaan dan semua opsi');temp.push({q,opts,a:+val('ans')});document.getElementById('qc').textContent=temp.length+' soal ditambahkan'}function saveExam(){if(!val('title'))return alert('Nama ujian wajib');db.exams.push({title:val('title'),subject:val('subject'),kelas:val('kelas'),date:val('dt'),questions:temp});done('exams')}function take(i){let x=db.exams[i];if(!x.questions.length)return alert('Belum ada soal');let h=`<div class="card"><h3>${e(x.title)}</h3>${inp('Nama peserta','pname')}${inp('NIS','pnis')}`;x.questions.forEach((q,n)=>h+=`<p><b>${n+1}. ${e(q.q)}</b></p>`+q.opts.map((o,j)=>`<label><input style="width:auto" type="radio" name="a${n}" value="${j}"> ${String.fromCharCode(65+j)}. ${e(o)}</label>`).join(''));h+=`<button onclick="submitExam(${i})">Kumpulkan Jawaban</button></div>`;document.getElementById('examrun').innerHTML=h}function submitExam(i){let x=db.exams[i],name=val('pname'),sid=val('pnis');if(!name||!sid)return alert('Isi nama dan NIS');let n=0;x.questions.forEach((q,j)=>{let a=document.querySelector('input[name="a'+j+'"]:checked');if(a&&+a.value===q.a)n++});db.grades.push({date:today(),sid,name,kelas:x.kelas,subject:x.subject,score:Math.round(n/x.questions.length*100)});save();alert('Nilai: '+Math.round(n/x.questions.length*100));page('grades')}
+function gradeForm(){if(!db.students.length)return alert('Tambahkan siswa');modal('Input Nilai',`<label>Siswa</label><select id="sid">${db.students.map(s=>`<option value="${e(s.id)}">${e(s.name)} — ${e(s.kelas)}</option>`)}</select>`+inp('Mapel','subject')+inp('Nilai 0-100','score','0','number')+`<button onclick="saveGrade()">Simpan</button>`)}function saveGrade(){let s=db.students.find(x=>x.id===val('sid')),score=+val('score');if(score<0||score>100)return alert('Nilai harus 0–100');db.grades.push({date:today(),sid:s.id,name:s.name,kelas:s.kelas,subject:val('subject'),score});done('grades')}function financeForm(){modal('Catat Transaksi',`<label>Jenis</label><select id="type"><option>Pemasukan</option><option>Pengeluaran</option></select>`+inp('Tanggal','dt',today(),'date')+inp('Nominal','amount','','number')+inp('Keterangan','note')+`<button onclick="saveFinance()">Simpan</button>`)}function saveFinance(){if(!val('amount')||!val('note'))return alert('Isi nominal dan keterangan');db.finance.push({type:val('type'),date:val('dt'),amount:+val('amount'),note:val('note')});done('finance')}function newsForm(){modal('Buat Pengumuman',inp('Judul','title')+'<label>Isi</label><textarea id="body"></textarea>'+inp('Tanggal','dt',today(),'date')+`<button onclick="saveNews()">Publikasikan</button>`)}function saveNews(){if(!val('title')||!val('body'))return alert('Isi judul dan pengumuman');db.news.push({title:val('title'),body:val('body'),date:val('dt')});done('news')}
+function done(p){save();closeM();page(p)}function edit(k,i){if(k==='students')studentForm(i);else if(k==='teachers')teacherForm(i);else alert('Untuk mengubah data ini, hapus lalu buat ulang.')}async function del(k,i){if(!confirm('Hapus data ini dari database?'))return;if(k==='students'&&hasServer()){try{const x=db.students[i];if(!x||!x.recordId)throw new Error('ID internal siswa tidak ditemukan. Muat ulang data terlebih dahulu.');await gasCall('apiHapusSiswa',x.recordId);await syncStudents();page('students')}catch(err){alert('Data siswa gagal dihapus: '+err.message)}return}if(k==='teachers'&&hasServer()){try{const x=db.teachers[i];if(!x||!x.recordId)throw new Error('ID internal personel tidak ditemukan. Sinkronkan ulang data terlebih dahulu.');await gasCall('apiHapusGuruPegawai',x.recordId);await syncTeachers();page('teachers')}catch(err){alert('Data personel gagal dihapus: '+err.message)}return}db[k].splice(i,1);save();page(k==='news'?'news':k)}function csv(k){if(!db[k].length)return alert('Belum ada data');let rows=db[k].map(x=>Object.fromEntries(Object.entries(x).map(([a,b])=>[a,Array.isArray(b)?JSON.stringify(b):b]))),keys=Object.keys(rows[0]),s=[keys.join(','),...rows.map(x=>keys.map(k=>'"'+String(x[k]??'').replace(/"/g,'""')+'"').join(','))].join('\r\n');download(s,k+'_MAN1.csv','text/csv')}function download(s,n,t){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([s],{type:t}));a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}function backup(){download(JSON.stringify(db,null,2),'backup_MAN1.json','application/json')}function restore(){let f=document.getElementById('restoreFile').files[0];if(!f)return alert('Pilih file JSON');let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.students||!x.teachers)throw 0;if(confirm('Ganti data saat ini?')){db=x;save();page('dashboard')}}catch(e){alert('File tidak valid')}};r.readAsText(f)}function reset(){if(confirm('Hapus seluruh data dan kembali ke data awal?')){db=JSON.parse(JSON.stringify(initial));save();page('dashboard')}}
+
+
+// Cache only legacy/local modules. Student and staff records remain in Google Sheets.
+window.save = function() {
+  if (!currentUser || currentUser.role !== "ADMIN") return;
+  const safeCache = {
+    attendance: Array.isArray(db.attendance) ? db.attendance : [],
+    exams: Array.isArray(db.exams) ? db.exams : [],
+    grades: Array.isArray(db.grades) ? db.grades : [],
+    finance: Array.isArray(db.finance) ? db.finance : [],
+    news: Array.isArray(db.news) ? db.news : []
+  };
+  localStorage.setItem(K, JSON.stringify(safeCache));
+};
+
+/* ==========================================================================
+ * AUTHENTICATION + ACCOUNT MANAGEMENT FRONTEND
+ * Backend validates every protected call. Browser-side checks only shape UI.
+ * ======================================================================== */
+let sessionToken = sessionStorage.getItem("MAN1_AUTH_SESSION") || "";
+let currentUser = null;
+let forcePasswordChange = false;
+let accountsCache = [];
+
+const ACCOUNT_PERMISSION_OPTIONS = [
+  ["students.view", "Melihat Data Siswa"],
+  ["students.manage", "Mengelola Data Siswa"],
+  ["teachers.view", "Melihat Profil Guru & Pegawai"],
+  ["teachers.manage", "Mengelola Data Guru & Pegawai"],
+  ["attendance.view", "Membuka Modul Presensi"],
+  ["attendance.test", "Melakukan Uji GPS"]
+];
+
+const PAGE_PERMISSION_MAP = {
+  dashboard: "dashboard",
+  students: "students.view",
+  teachers: "teachers.view",
+  attendance: "attendance.view",
+  accounts: "accounts.manage",
+  settings: "settings.manage"
+};
+
+const originalPage = window.page;
+const originalRenderTeachersPage = window.renderTeachersPage;
+const originalCloseM = window.closeM;
+
+function hasPermission(permission) {
+  return !!currentUser && (
+    currentUser.role === "ADMIN" ||
+    (Array.isArray(currentUser.permissions) && currentUser.permissions.indexOf(permission) >= 0)
+  );
+}
+
+function canAccessPage(pageName) {
+  if (!currentUser) return false;
+  if (pageName === "accounts" || pageName === "settings") return currentUser.role === "ADMIN";
+  // Modul berikut masih memakai localStorage, belum menjadi layanan server terproteksi.
+  if (["exams", "grades", "finance", "news"].indexOf(pageName) >= 0) {
+    return currentUser.role === "ADMIN";
+  }
+  const permission = PAGE_PERMISSION_MAP[pageName];
+  return !!permission && hasPermission(permission);
+}
+
+function setUserLabel() {
+  const label = document.getElementById("currentUserLabel");
+  if (label && currentUser) {
+    const roleNames = { ADMIN: "Admin", GURU: "Guru", TENDIK: "Tenaga Kependidikan", SISWA: "Siswa" };
+    label.textContent = currentUser.name + " • " + (roleNames[currentUser.role] || currentUser.role);
+  }
+}
+
+function applyNavigation(activePage) {
+  document.querySelectorAll(".nav").forEach(item => {
+    const match = (item.getAttribute("onclick") || "").match(/page\('([^']+)'\)/);
+    const route = match ? match[1] : "";
+    item.style.display = route && canAccessPage(route) ? "" : "none";
+    item.classList.toggle("active", route === activePage);
+  });
+}
+
+function loadAdminLocalModules() {
+  const cached = JSON.parse(localStorage.getItem(K) || "null");
+  db = JSON.parse(JSON.stringify(initial));
+  if (!cached || typeof cached !== "object") return;
+  ["attendance", "exams", "grades", "finance", "news"].forEach(key => {
+    if (Array.isArray(cached[key])) db[key] = cached[key];
+  });
+  // Data Siswa dan Guru/Tendik selalu diambil dari Google Sheets, bukan cache browser.
+  db.students = [];
+  db.teachers = [];
+}
+
+function resetUserDataInMemory() {
+  db = JSON.parse(JSON.stringify(initial));
+}
+
+function gasCall(method, ...args) {
+  return new Promise((resolve, reject) => {
+    if (!hasServer()) {
+      reject(new Error("Aplikasi harus dibuka melalui URL Google Apps Script Web App (HTTPS)."));
+      return;
+    }
+    const runner = google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(err => reject(new Error(err && err.message ? err.message : String(err))));
+
+    if (method === "apiLogin") {
+      runner[method](...args);
+    } else if (method === "apiLogout") {
+      runner[method](sessionToken);
+    } else {
+      if (!sessionToken) {
+        reject(new Error("Sesi tidak ditemukan. Silakan login kembali."));
+        return;
+      }
+      runner[method](...args, sessionToken);
+    }
+  });
+}
+
+async function loadUserData() {
+  if (!currentUser || currentUser.mustChangePassword) return;
+  const tasks = [];
+  if (hasPermission("students.view")) tasks.push(syncStudents());
+  if (hasPermission("teachers.view")) tasks.push(syncTeachers());
+  if (hasPermission("attendance.view")) {
+    tasks.push(gasCall("apiAmbilKonfigurasiPresensi").then(config => {
+      attendanceConfig = config;
+    }));
+  }
+  const status = document.getElementById("syncStatus");
+  if (status) status.textContent = "Menghubungkan ke database...";
+  try {
+    await Promise.all(tasks);
+    if (status) status.textContent = "Google Sheets aktif • sesi terautentikasi";
+  } catch (err) {
+    if (status) status.textContent = "Sebagian data belum tersinkron";
+    throw err;
+  }
+}
+
+async function activateUser(userProfile) {
+  currentUser = userProfile;
+  setUserLabel();
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  const dateEl = document.getElementById("date");
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString("id-ID");
+  applyNavigation("dashboard");
+
+  if (currentUser.mustChangePassword) {
+    tampilkanFormGantiPassword(true);
+    return;
+  }
+
+  if (currentUser.role === "ADMIN") loadAdminLocalModules();
+  else resetUserDataInMemory();
+
+  try {
+    await loadUserData();
+  } catch (err) {
+    alert("Login berhasil, tetapi sinkronisasi data belum lengkap: " + err.message);
+  }
+  applyNavigation("dashboard");
+  page("dashboard");
+}
+
+window.login = async function() {
+  const username = document.getElementById("user").value.trim();
+  const password = document.getElementById("pass").value;
+  const button = document.getElementById("loginButton");
+  const message = document.getElementById("loginMessage");
+
+  if (!username || !password) {
+    if (message) message.textContent = "Username dan password wajib diisi.";
+    return;
+  }
+  if (!hasServer()) {
+    if (message) message.textContent = "Buka aplikasi melalui URL Web App Google Apps Script.";
+    return;
+  }
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Memeriksa akun...";
+  }
+  try {
+    const result = await gasCall("apiLogin", username, password);
+    sessionToken = result.sessionToken;
+    sessionStorage.setItem("MAN1_AUTH_SESSION", sessionToken);
+    document.getElementById("pass").value = "";
+    if (message) message.textContent = "";
+    await activateUser(result.user);
+  } catch (err) {
+    document.getElementById("pass").value = "";
+    if (message) message.textContent = err.message;
+    else alert(err.message);
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Masuk ke Aplikasi →";
+    }
+  }
+};
+
+window.logout = async function() {
+  try {
+    if (sessionToken && hasServer()) await gasCall("apiLogout");
+  } catch (err) {
+    // Token lokal tetap dihapus walaupun server tidak dapat dihubungi.
+  }
+  sessionToken = "";
+  currentUser = null;
+  forcePasswordChange = false;
+  sessionStorage.removeItem("MAN1_AUTH_SESSION");
+  resetUserDataInMemory();
+  document.getElementById("app").style.display = "none";
+  document.getElementById("login").style.display = "grid";
+  const label = document.getElementById("currentUserLabel");
+  if (label) label.textContent = "";
+  const message = document.getElementById("loginMessage");
+  if (message) message.textContent = "Anda telah keluar. Silakan login kembali.";
+  applyNavigation("");
+};
+
+window.closeM = function() {
+  if (forcePasswordChange) {
+    alert("Anda harus mengganti password sementara sebelum menggunakan aplikasi.");
+    return;
+  }
+  originalCloseM();
+};
+
+function tampilkanFormGantiPassword(force) {
+  forcePasswordChange = !!force;
+  const html =
+    '<p class="small-muted">Gunakan password baru minimal 10 karakter, mengandung huruf dan angka.</p>' +
+    inp("Password sementara / password lama", "oldPassword", "", "password") +
+    inp("Password baru", "newPassword", "", "password") +
+    inp("Ulangi password baru", "confirmPassword", "", "password") +
+    '<button onclick="simpanPasswordBaru()">Simpan Password Baru</button>';
+  modal("Ganti Password", html);
+}
+
+window.simpanPasswordBaru = async function() {
+  const oldPassword = val("oldPassword");
+  const newPassword = val("newPassword");
+  const confirmPassword = val("confirmPassword");
+  if (!oldPassword || !newPassword) return alert("Lengkapi seluruh kolom password.");
+  if (newPassword !== confirmPassword) return alert("Konfirmasi password tidak sama.");
+  try {
+    const result = await gasCall("apiGantiPassword", oldPassword, newPassword);
+    currentUser = result.user;
+    forcePasswordChange = false;
+    originalCloseM();
+    setUserLabel();
+    if (currentUser.role === "ADMIN") loadAdminLocalModules();
+    else resetUserDataInMemory();
+    await loadUserData();
+    applyNavigation("dashboard");
+    page("dashboard");
+    alert("Password berhasil diganti.");
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+function renderRoleDashboard() {
+  const roleNames = { GURU: "Guru", TENDIK: "Tenaga Kependidikan", SISWA: "Siswa" };
+  const view = document.getElementById("view");
+  view.innerHTML =
+    '<div class="head"><div><h2>Dashboard</h2><p style="color:#667085">Portal Digital School MAN 1 Kota Malang.</p></div></div>' +
+    '<div class="card"><h3>Selamat datang, ' + e(currentUser.name) + '.</h3>' +
+    '<p>Anda masuk sebagai <b>' + e(roleNames[currentUser.role] || currentUser.role) + '</b>.</p>' +
+    '<p class="small-muted">Menu yang tampil telah disesuaikan dengan hak akses yang diberikan Admin.</p></div>' +
+    '<div class="card"><h3>Layanan yang tersedia</h3><p>Gunakan menu di sebelah kiri untuk membuka layanan yang diizinkan.</p>' +
+    '<div class="notice">Modul CBT, Nilai, Keuangan, dan Pengumuman masih dalam tahap pemindahan dari penyimpanan browser ke database pusat. Untuk menjaga kerahasiaan, modul tersebut sementara hanya tersedia bagi Admin.</div></div>';
+}
+
+window.page = function(pageName) {
+  if (!currentUser) return;
+  if (!canAccessPage(pageName)) {
+    const view = document.getElementById("view");
+    view.innerHTML = '<div class="card"><h3>Akses tidak tersedia</h3><p>Hak akses Anda belum mencakup menu ini. Silakan hubungi Admin madrasah.</p></div>';
+    applyNavigation("");
+    return;
+  }
+
+  if (pageName === "accounts") {
+    applyNavigation("accounts");
+    renderAccountsPage();
+    return;
+  }
+
+  if (pageName === "dashboard" && currentUser.role !== "ADMIN") {
+    applyNavigation("dashboard");
+    renderRoleDashboard();
+    return;
+  }
+
+  originalPage(pageName);
+  applyNavigation(pageName);
+
+  if (pageName === "students" && !hasPermission("students.manage")) {
+    document.querySelectorAll("#view .actions").forEach(node => node.remove());
+    document.querySelectorAll("#view button").forEach(button => {
+      if (button.textContent.toLowerCase().includes("tambah siswa")) button.remove();
+    });
+  }
+  if (pageName === "teachers" && !hasPermission("teachers.manage")) {
+    document.querySelectorAll("#view .actions").forEach(node => node.remove());
+    document.querySelectorAll("#view button").forEach(button => {
+      if (button.textContent.toLowerCase().includes("tambah personel")) button.remove();
+    });
+  }
+  if (pageName === "attendance" && currentUser.role !== "ADMIN") {
+    document.querySelectorAll("#view button").forEach(button => {
+      const label = button.textContent.toLowerCase();
+      if (label.includes("pengaturan presensi")) button.remove();
+      if (label.includes("uji lokasi gps") && !hasPermission("attendance.test")) button.remove();
+    });
+  }
+};
+
+window.renderTeachersPage = function() {
+  originalRenderTeachersPage();
+  if (currentUser && !hasPermission("teachers.manage")) {
+    document.querySelectorAll("#view .actions").forEach(node => node.remove());
+    document.querySelectorAll("#view button").forEach(button => {
+      if (button.textContent.toLowerCase().includes("tambah personel")) button.remove();
+    });
+  }
+};
+
+function permissionCheckboxes(selected) {
+  const selectedSet = new Set(selected || []);
+  return '<div class="perm-grid">' + ACCOUNT_PERMISSION_OPTIONS.map(item =>
+    '<label class="perm-item"><input type="checkbox" name="accPermission" value="' + e(item[0]) + '"' +
+    (selectedSet.has(item[0]) ? " checked" : "") + '><span>' + e(item[1]) + '</span></label>'
+  ).join("") + '</div>';
+}
+
+function defaultPermissionsForRole(role) {
+  const defaults = {
+    ADMIN: [],
+    GURU: ["dashboard", "students.view", "teachers.view", "attendance.view", "attendance.test"],
+    TENDIK: ["dashboard", "teachers.view", "attendance.view"],
+    SISWA: ["dashboard", "attendance.view", "attendance.test"]
+  };
+  return defaults[role] || [];
+}
+
+window.accountRoleChanged = function() {
+  const role = val("accRole");
+  const permissionWrap = document.getElementById("accPermissionWrap");
+  const refLabel = document.getElementById("accRefLabel");
+  const refInput = document.getElementById("accRef");
+  const nameInput = document.getElementById("accName");
+  if (role === "ADMIN") {
+    if (refLabel) refLabel.textContent = "Reference ID (tidak diperlukan untuk Admin)";
+    if (refInput) refInput.disabled = true;
+    if (nameInput) nameInput.disabled = false;
+    if (permissionWrap) permissionWrap.innerHTML = '<div class="notice">Admin otomatis memperoleh seluruh hak akses.</div>';
+  } else {
+    if (refLabel) refLabel.textContent = role === "SISWA" ? "NIS Siswa" : "NIP / ID Pegawai";
+    if (refInput) refInput.disabled = false;
+    if (nameInput) nameInput.disabled = true;
+    if (permissionWrap) permissionWrap.innerHTML = permissionCheckboxes(defaultPermissionsForRole(role));
+  }
+};
+
+window.accountForm = function(accountId) {
+  const account = accountId ? accountsCache.find(item => item.id === accountId) : null;
+  const role = account ? account.role : "GURU";
+  const permissions = account ? account.permissions : defaultPermissionsForRole(role);
+  const html =
+    '<label>Nama Lengkap</label><input id="accName" value="' + e(account ? account.name : "") + '"' +
+      (role === "ADMIN" ? "" : " disabled") + '>' +
+    '<label>Username</label><input id="accUsername" value="' + e(account ? account.username : "") + '" autocomplete="off">' +
+    '<label>Kategori Akun</label><select id="accRole" onchange="accountRoleChanged()">' +
+      '<option value="ADMIN"' + (role === "ADMIN" ? " selected" : "") + '>Admin</option>' +
+      '<option value="GURU"' + (role === "GURU" ? " selected" : "") + '>Guru</option>' +
+      '<option value="TENDIK"' + (role === "TENDIK" ? " selected" : "") + '>Tenaga Kependidikan</option>' +
+      '<option value="SISWA"' + (role === "SISWA" ? " selected" : "") + '>Siswa</option></select>' +
+    '<label id="accRefLabel">' + (role === "SISWA" ? "NIS Siswa" : "NIP / ID Pegawai") + '</label>' +
+    '<input id="accRef" value="' + e(account ? account.referenceId : "") + '"' +
+      (role === "ADMIN" ? " disabled" : "") + ' placeholder="Masukkan NIP/ID atau NIS">' +
+    (account ? '<label>Status Akun</label><select id="accStatus"><option value="AKTIF"' +
+      (account.status === "AKTIF" ? " selected" : "") + '>Aktif</option><option value="NONAKTIF"' +
+      (account.status === "NONAKTIF" ? " selected" : "") + '>Nonaktif</option></select>' : '') +
+    '<div id="accPermissionWrap"><h4>Hak Akses</h4>' +
+      (role === "ADMIN" ? '<div class="notice">Admin otomatis memperoleh seluruh hak akses.</div>' : permissionCheckboxes(permissions)) +
+    '</div><div class="notice">Guru/Tendik dicocokkan dengan NIP/ID pada sheet Teachers. Siswa dicocokkan dengan NIS pada sheet Students. Nama akun diambil dari database induk.</div>' +
+    '<div class="toolbar"><button onclick="simpanAkun(' + (account ? "'" + e(account.id) + "'" : "''") + ')">Simpan</button>' +
+    '<button class="secondary" onclick="closeM()">Batal</button></div>';
+  modal(account ? "Edit Akun" : "Buat Akun Baru", html);
+  if (!account) {
+    const roleEl = document.getElementById("accRole");
+    if (roleEl) roleEl.value = "GURU";
+    accountRoleChanged();
+  }
+};
+
+window.simpanAkun = async function(accountId) {
+  const role = val("accRole");
+  const permissions = Array.from(document.querySelectorAll('input[name="accPermission"]:checked')).map(input => input.value);
+  const payload = {
+    id: accountId || "",
+    username: val("accUsername"),
+    name: val("accName"),
+    role: role,
+    referenceId: val("accRef"),
+    status: accountId ? val("accStatus") : "AKTIF",
+    permissions: role === "ADMIN" ? [] : permissions
+  };
+
+  try {
+    if (accountId) {
+      await gasCall("apiUbahAkun", payload);
+      closeM();
+      await renderAccountsPage();
+      alert("Akun berhasil diperbarui.");
+    } else {
+      const result = await gasCall("apiBuatAkun", payload);
+      accountsCache.push(result.account);
+      tampilkanPasswordSementara(result.temporaryPassword, result.account.username);
+    }
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+function tampilkanPasswordSementara(password, username) {
+  modal("Akun berhasil dibuat", '<p>Akun <b>' + e(username) + '</b> telah dibuat. Salin password sementara berikut dan sampaikan kepada pemilik akun melalui jalur aman.</p>' +
+    '<label>Password sementara</label><input id="tempPasswordOutput" readonly value="' + e(password) + '">' +
+    '<div class="toolbar"><button onclick="salinPasswordSementara()">Salin Password</button><button class="secondary" onclick="closeM();renderAccountsPage()">Selesai</button></div>' +
+    '<div class="notice">Password sementara hanya ditampilkan sekarang. Pengguna wajib menggantinya saat login pertama.</div>');
+}
+
+window.salinPasswordSementara = async function() {
+  const input = document.getElementById("tempPasswordOutput");
+  if (!input) return;
+  input.select();
+  try {
+    await navigator.clipboard.writeText(input.value);
+    alert("Password sementara berhasil disalin.");
+  } catch (err) {
+    alert("Silakan salin password secara manual dari kolom.");
+  }
+};
+
+window.editAccount = function(id) {
+  accountForm(id);
+};
+
+window.resetAccountPassword = async function(id) {
+  if (!confirm("Reset password akun ini? Password lama tidak akan berlaku lagi.")) return;
+  try {
+    const result = await gasCall("apiResetPasswordAkun", id);
+    const account = accountsCache.find(item => item.id === id);
+    tampilkanPasswordSementara(result.temporaryPassword, account ? account.username : "pengguna");
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+window.toggleAccountStatus = async function(id) {
+  const account = accountsCache.find(item => item.id === id);
+  if (!account) return;
+  const nextStatus = account.status === "AKTIF" ? "NONAKTIF" : "AKTIF";
+  if (!confirm((nextStatus === "NONAKTIF" ? "Nonaktifkan" : "Aktifkan") + " akun " + account.username + "?")) return;
+  try {
+    await gasCall("apiUbahAkun", {
+      id: account.id,
+      username: account.username,
+      name: account.name,
+      role: account.role,
+      referenceId: account.referenceId,
+      status: nextStatus,
+      permissions: account.permissions
+    });
+    await renderAccountsPage();
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+async function renderAccountsPage() {
+  const view = document.getElementById("view");
+  view.innerHTML = '<div class="head"><div><h2>Manajemen Akun</h2><p style="color:#667085">Pembuatan akun dan pengaturan hak akses oleh Admin.</p></div><button onclick="accountForm()">＋ Buat Akun</button></div><div class="card">Memuat daftar akun...</div>';
+  try {
+    const results = await Promise.all([
+      gasCall("apiDaftarAkun"),
+      syncStudents(),
+      syncTeachers()
+    ]);
+    accountsCache = results[0] || [];
+    view.innerHTML =
+      '<div class="head"><div><h2>Manajemen Akun</h2><p style="color:#667085">Admin mengelola akun Guru, Tenaga Kependidikan, dan Siswa.</p></div><button onclick="accountForm()">＋ Buat Akun</button></div>' +
+      '<div class="grid"><div class="card stat"><small>Total Akun</small><h2>' + accountsCache.length + '</h2></div>' +
+      '<div class="card stat"><small>Aktif</small><h2>' + accountsCache.filter(a => a.status === "AKTIF").length + '</h2></div>' +
+      '<div class="card stat"><small>Nonaktif</small><h2>' + accountsCache.filter(a => a.status === "NONAKTIF").length + '</h2></div>' +
+      '<div class="card stat"><small>Wajib Ganti Password</small><h2>' + accountsCache.filter(a => a.mustChangePassword).length + '</h2></div></div>' +
+      '<div class="card"><div class="toolbar"><input id="accountSearch" placeholder="Cari username/nama/NIS/NIP..." oninput="filterAccountRows()"><button class="secondary" onclick="renderAccountsPage()">↻ Muat Ulang</button></div>' +
+      '<div class="wrap"><table><thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Reference ID</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="accountRows">' +
+      (accountsCache.map(account => '<tr><td>' + e(account.username) + '</td><td>' + e(account.name) + '</td><td>' + e(account.role) + '</td><td>' + e(account.referenceId || "—") + '</td><td><span class="pill">' + e(account.status) + '</span></td><td><div class="account-actions">' +
+        '<button class="secondary" onclick="editAccount(\'' + e(account.id) + '\')">Edit</button>' +
+        '<button class="secondary" onclick="resetAccountPassword(\'' + e(account.id) + '\')">Reset Password</button>' +
+        '<button class="' + (account.status === "AKTIF" ? "danger" : "") + '" onclick="toggleAccountStatus(\'' + e(account.id) + '\')">' + (account.status === "AKTIF" ? "Nonaktifkan" : "Aktifkan") + '</button>' +
+      '</div></td></tr>').join("") || '<tr><td colspan="6">Belum ada akun.</td></tr>') +
+      '</tbody></table></div></div>' +
+      '<div class="notice">Password tidak ditampilkan pada daftar akun. Reset password menghasilkan password sementara baru yang wajib diganti pengguna.</div>';
+    applyNavigation("accounts");
+  } catch (err) {
+    view.innerHTML = '<div class="card"><h3>Gagal memuat Manajemen Akun</h3><p>' + e(err.message) + '</p></div>';
+  }
+}
+
+window.filterAccountRows = function() {
+  const q = (document.getElementById("accountSearch")?.value || "").toLowerCase();
+  document.querySelectorAll("#accountRows tr").forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(q) ? "" : "none";
+  });
+};
+
+// Restore an existing server session after a page refresh.
+window.addEventListener("DOMContentLoaded", async function() {
+  if (!sessionToken || !hasServer()) return;
+  try {
+    const profile = await gasCall("apiSessionMe");
+    await activateUser(profile);
+  } catch (err) {
+    sessionToken = "";
+    sessionStorage.removeItem("MAN1_AUTH_SESSION");
+  }
+});
+
+</script></body></html>
